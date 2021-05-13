@@ -1,0 +1,53 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
+public class 两个数组的交集Ⅱ {
+    public int[] intersect1(int[] nums1, int[] nums2) {//列表+双指针
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);//对两个数组排序
+        int i = 0;
+        int j = 0;//初始化两个指针
+        List<Integer> list = new ArrayList<>();//新建一个列表
+        while(i<nums1.length && j<nums2.length){
+            if(nums1[i] < nums2[j]){
+                i++;//如果小，小的数组指针右移一位
+            }
+            else if(nums1[i] > nums2[j]){
+                j++;//如果小，小的数组指针右移一位
+            }
+            else{
+                list.add(nums1[i]);//相等，加入列表
+                i++;
+                j++;//两个指针同时右移一位
+            }
+        }
+        int index = 0;//新建一个数组下标
+        int[] res = new int[list.size()];//新建一个与列表等长的数组
+        for(int k = 0;k<list.size();k++){
+            res[index++] = list.get(k);//将列表中每个元素加入数组
+        }
+        return res;//返回新数组，即为所求交集
+    }
+
+    public int[] intersect2(int[] nums1, int[] nums2){//哈希表+列表
+        Map<Integer, Integer> map = new HashMap<>();//新建哈希表
+        List<Integer> list = new ArrayList<>();//新建列表
+        for(int i = 0;i<nums1.length;i++){//将nums1中键值对加入map
+            map.put(nums1[i], map.getOrDefault(nums1[i],0)+1);
+        }
+        for(int j = 0;j<nums2.length;j++){
+            if(map.getOrDefault(nums2[j],0) > 0){//如果在nums2中找到map中的键值对
+                list.add(nums2[j]);//添加入list
+                map.put(nums2[j], map.get(nums2[j]) - 1);//将所添加键值对中的值减一
+            }
+        }
+        int[] res = new int[list.size()];//新建答案数组
+        for(int i = 0;i<list.size();i++){
+            res[i] = list.get(i);//将列表元素转入数组
+        }
+        return res;//返回结果
+    }
+}
